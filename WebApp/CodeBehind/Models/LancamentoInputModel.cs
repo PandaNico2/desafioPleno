@@ -12,7 +12,7 @@ public class LancamentoInputModel
     [Required(ErrorMessage = "Selecione o tipo do lancamento.")]
     public TipoLancamento Tipo { get; set; }
 
-    [Range(typeof(decimal), "0,01", "999999999", ErrorMessage = "Informe um valor original valido.")]
+    [Range(typeof(decimal), "0,01", "999999999", ErrorMessage = "O lancamento nao foi cadastrado porque o valor original deve ser maior que zero.")]
     public decimal ValorOriginal { get; set; }
 
     [Range(typeof(decimal), "0", "100", ErrorMessage = "A taxa deve estar entre 0 e 100.")]

@@ -59,6 +59,7 @@ public class CriarModel : PageModel
     {
         if (!ModelState.IsValid)
         {
+            AddFriendlyValidationSummary();
             return Page();
         }
 
@@ -82,6 +83,14 @@ public class CriarModel : PageModel
         {
             ModelState.AddModelError(string.Empty, $"Erro inesperado: {ex.Message}");
             return Page();
+        }
+    }
+
+    private void AddFriendlyValidationSummary()
+    {
+        if (ModelState.ContainsKey("Input.ValorOriginal") && ModelState["Input.ValorOriginal"]?.Errors.Count > 0)
+        {
+            ModelState.AddModelError(string.Empty, "O lancamento nao foi cadastrado porque o valor original deve ser maior que zero.");
         }
     }
 }

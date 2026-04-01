@@ -1,6 +1,7 @@
 using CodeBehind.Enums;
 using CodeBehind.Models;
 using CodeBehind.Services;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -61,6 +62,7 @@ public class EditarModel : PageModel
     {
         if (!ModelState.IsValid)
         {
+            AddFriendlyValidationSummary();
             return Page();
         }
 
@@ -75,5 +77,52 @@ public class EditarModel : PageModel
             ModelState.AddModelError(string.Empty, ex.Message);
             return Page();
         }
+        catch (SqlException ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro ao acessar o banco de dados: {ex.Message}");
+            return Page();
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro inesperado: {ex.Message}");
+            return Page();
+        }
+    }
+
+    private void AddFriendlyValidationSummary()
+    {
+        ReplaceEnglishNumberMessage("Input.ValorOriginal", "O valor original deve ser um numero valido.");
+        ReplaceEnglishNumberMessage("Input.PercentualTaxa", "A taxa deve ser um numero valido.");
+        ReplaceEnglishNumberMessage("Input.PercentualDesconto", "O desconto deve ser um numero valido.");
+
+        if (ModelState.ContainsKey("Input.ValorOriginal") && ModelState["Input.ValorOriginal"]?.Errors.Count > 0)
+        {
+            ModelState.AddModelError(string.Empty, "O lancamento nao foi atualizado porque o valor original deve ser maior que zero.");
+        }
+    }
+
+    private void ReplaceEnglishNumberMessage(string key, string message)
+    {
+        if (!ModelState.ContainsKey(key) || ModelState[key] is null)
+        {
+            return;
+        }
+
+        var entry = ModelState[key]!;
+        if (entry.Errors.Count == 0)
+        {
+            return;
+        }
+
+        var hasEnglishMessage = entry.Errors.Any(error =>
+            error.ErrorMessage.Contains("must be a number", StringComparison.OrdinalIgnoreCase));
+
+        if (!hasEnglishMessage)
+        {
+            return;
+        }
+
+        entry.Errors.Clear();
+        entry.Errors.Add(message);
     }
 }
