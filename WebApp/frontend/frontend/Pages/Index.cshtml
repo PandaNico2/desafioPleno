@@ -1,0 +1,114 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Lancamentos";
+}
+
+<section class="hero-card mb-4">
+    <div>
+        <p class="eyebrow">Desafio tecnico</p>
+        <h1>Controle de lancamentos financeiros</h1>
+        <p class="hero-copy">Cadastre, acompanhe o saldo de itens pagos e execute os fluxos de pagamento, cancelamento e exportacao por competencia.</p>
+    </div>
+    <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" asp-page="/Lancamentos/Criar">Novo lancamento</a>
+    </div>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.Mensagem))
+{
+    <div class="alert alert-success" role="alert">@Model.Mensagem</div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Erro))
+{
+    <div class="alert alert-danger" role="alert">@Model.Erro</div>
+}
+
+<section class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <span class="stat-label">Saldo de pagos</span>
+            <strong>@Model.Saldo.ToString("C")</strong>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <span class="stat-label">Total listado</span>
+            <strong>@Model.Lancamentos.Count</strong>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <span class="stat-label">Filtro atual</span>
+            <strong>@(string.IsNullOrWhiteSpace(Model.Competencia) ? "Todas" : Model.Competencia)</strong>
+        </div>
+    </div>
+</section>
+
+<section class="panel-card mb-4">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label" asp-for="Competencia">Competencia</label>
+            <input class="form-control" asp-for="Competencia" placeholder="AAAA-MM" />
+        </div>
+        <div class="col-md-8 d-flex gap-2">
+            <button type="submit" class="btn btn-outline-primary">Filtrar</button>
+            <a class="btn btn-outline-secondary" asp-page="/Index">Limpar</a>
+            <button type="submit" class="btn btn-outline-success" asp-page-handler="Exportar">Exportar CSV</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Descricao</th>
+                    <th>Competencia</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                    <th>Valor Original</th>
+                    <th>Valor Calculado</th>
+                    <th>Data Lancamento</th>
+                    <th>Acoes</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Lancamentos.Count == 0)
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">Nenhum lancamento encontrado.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model.Lancamentos)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.Descricao</strong>
+                            <div class="text-muted small">@item.DataCriacao.ToString("dd/MM/yyyy HH:mm")</div>
+                        </td>
+                        <td>@item.Competencia</td>
+                        <td>@item.Tipo</td>
+                        <td><span class="status-pill status-@item.Status.ToString().ToLowerInvariant()">@item.Status</span></td>
+                        <td>@item.ValorOriginal.ToString("C")</td>
+                        <td>@item.ValorCalculado.ToString("C")</td>
+                        <td>@item.DataLancamento.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="actions-cell">
+                            <a class="btn btn-sm btn-outline-primary" asp-page="/Lancamentos/Editar" asp-route-id="@item.Id">Editar</a>
+                            @if (item.Status == CodeBehind.Enums.StatusLancamento.Aberto)
+                            {
+                                <a class="btn btn-sm btn-outline-success" asp-page="/Lancamentos/Pagar" asp-route-id="@item.Id">Pagar</a>
+                                <a class="btn btn-sm btn-outline-danger" asp-page="/Lancamentos/Cancelar" asp-route-id="@item.Id">Cancelar</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,158 @@
+html {
+  font-size: 14px;
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  color: #1f2937;
+  background:
+    radial-gradient(circle at top, rgba(14, 165, 233, 0.16), transparent 28%),
+    linear-gradient(180deg, #f8fbff 0%, #eef4f8 100%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.site-header {
+  background: linear-gradient(135deg, #0f172a, #1d4ed8);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+}
+
+.navbar {
+  padding: 1rem 0;
+}
+
+.navbar-brand,
+.nav-link {
+  color: #f8fafc !important;
+}
+
+.nav-link {
+  opacity: 0.82;
+}
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+.hero-card,
+.panel-card,
+.stat-card,
+.preview-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.hero-card {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hero-card h1,
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 700;
+}
+
+.hero-copy {
+  max-width: 52rem;
+  margin-top: 0.75rem;
+  color: #475569;
+}
+
+.eyebrow {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.hero-actions,
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.stat-card,
+.panel-card,
+.preview-card {
+  padding: 1.5rem;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.stat-label {
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-aberto {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-pago {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-cancelado {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 0.75rem;
+}
+
+.btn {
+  border-radius: 999px;
+}
+
+.footer {
+  padding: 1.5rem 0 2rem;
+}
+
+@media (max-width: 767px) {
+  .hero-card,
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

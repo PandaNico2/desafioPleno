@@ -1,0 +1,23 @@
+# Build outputs
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Local .NET CLI state
+.dotnethome/
+
+# Logs
+*.log
+build.log
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Optional local database files
+*.mdf
+*.ldf

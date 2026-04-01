@@ -1,0 +1,73 @@
+@page "{id:int}"
+@model frontend.Pages.Lancamentos.EditarModel
+@{
+    ViewData["Title"] = "Editar lancamento";
+}
+
+<section class="page-header mb-4">
+    <div>
+        <p class="eyebrow">Edicao</p>
+        <h1>Editar lancamento</h1>
+    </div>
+    <a class="btn btn-outline-secondary" asp-page="/Index">Voltar</a>
+</section>
+
+<section class="panel-card">
+    <form method="post" class="row g-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="col-md-8">
+            <label class="form-label" asp-for="Input.Descricao"></label>
+            <input class="form-control" asp-for="Input.Descricao" />
+            <span class="text-danger" asp-validation-for="Input.Descricao"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label" asp-for="Input.Competencia"></label>
+            <input class="form-control" asp-for="Input.Competencia" placeholder="AAAA-MM" />
+            <span class="text-danger" asp-validation-for="Input.Competencia"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label" asp-for="Input.Tipo"></label>
+            <select class="form-select" asp-for="Input.Tipo" asp-items="Model.Tipos"></select>
+            <span class="text-danger" asp-validation-for="Input.Tipo"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label" asp-for="Input.ValorOriginal"></label>
+            <input class="form-control" asp-for="Input.ValorOriginal" type="number" step="0.01" />
+            <span class="text-danger" asp-validation-for="Input.ValorOriginal"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label" asp-for="Input.DataLancamento"></label>
+            <input class="form-control" asp-for="Input.DataLancamento" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+            <span class="text-danger" asp-validation-for="Input.DataLancamento"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label" asp-for="Input.PercentualTaxa"></label>
+            <input class="form-control" asp-for="Input.PercentualTaxa" type="number" step="0.01" />
+            <small class="text-muted">Use apenas para debito.</small>
+            <span class="text-danger" asp-validation-for="Input.PercentualTaxa"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label" asp-for="Input.PercentualDesconto"></label>
+            <input class="form-control" asp-for="Input.PercentualDesconto" type="number" step="0.01" />
+            <small class="text-muted">Use apenas para credito.</small>
+            <span class="text-danger" asp-validation-for="Input.PercentualDesconto"></span>
+        </div>
+
+        <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Salvar alteracoes</button>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
