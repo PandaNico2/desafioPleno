@@ -1,5 +1,7 @@
 using CodeBehind.Models;
 using CodeBehind.Services;
+using CodeBehind.Enums;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -21,6 +23,9 @@ public class PagarModel : PageModel
     public DateTime DataProcessamento { get; set; } = DateTime.Now;
 
     public string Descricao { get; private set; } = string.Empty;
+    public string AcaoTitulo { get; private set; } = "Registrar pagamento";
+    public string AcaoBotao { get; private set; } = "Confirmar pagamento";
+    public string AcaoTexto { get; private set; } = "pagos";
 
     public async Task<IActionResult> OnGetAsync(CancellationToken cancellationToken)
     {
@@ -32,6 +37,7 @@ public class PagarModel : PageModel
         }
 
         Descricao = item.Descricao;
+        SetTexts(item.Tipo);
         return Page();
     }
 
@@ -48,7 +54,41 @@ public class PagarModel : PageModel
             ModelState.AddModelError(string.Empty, ex.Message);
             var item = await _service.ObterPorIdAsync(Id, cancellationToken);
             Descricao = item?.Descricao ?? string.Empty;
+            if (item is not null)
+            {
+                SetTexts(item.Tipo);
+            }
             return Page();
         }
+        catch (SqlException ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro ao acessar o banco de dados: {ex.Message}");
+            var item = await _service.ObterPorIdAsync(Id, cancellationToken);
+            Descricao = item?.Descricao ?? string.Empty;
+            if (item is not null)
+            {
+                SetTexts(item.Tipo);
+            }
+            return Page();
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro inesperado: {ex.Message}");
+            var item = await _service.ObterPorIdAsync(Id, cancellationToken);
+            Descricao = item?.Descricao ?? string.Empty;
+            if (item is not null)
+            {
+                SetTexts(item.Tipo);
+            }
+            return Page();
+        }
+    }
+
+    private void SetTexts(TipoLancamento tipo)
+    {
+        var isCredito = tipo == TipoLancamento.Credito;
+        AcaoTitulo = isCredito ? "Registrar recebimento" : "Registrar pagamento";
+        AcaoBotao = isCredito ? "Confirmar recebimento" : "Confirmar pagamento";
+        AcaoTexto = isCredito ? "recebidos" : "pagos";
     }
 }

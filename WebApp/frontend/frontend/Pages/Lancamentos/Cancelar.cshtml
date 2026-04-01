@@ -1,7 +1,7 @@
 @page "{id:int}"
 @model frontend.Pages.Lancamentos.CancelarModel
 @{
-    ViewData["Title"] = "Cancelar lancamento";
+    ViewData["Title"] = "Cancelar lançamento";
 }
 
 <section class="page-header mb-4">
@@ -13,11 +13,14 @@
 </section>
 
 <section class="panel-card">
-    <p><strong>@Model.Descricao</strong></p>
-    <p class="text-muted">Apenas lancamentos em aberto podem ser cancelados.</p>
+    <div class="form-helper mb-3">
+        <strong>Lançamento:</strong> @Model.Descricao
+        <br />
+        Apenas lançamentos em <strong>aberto</strong> podem ser cancelados.
+    </div>
 
     <form method="post" class="row g-3">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-0"></div>
         <input type="hidden" asp-for="Id" />
 
         <div class="col-md-6">
@@ -28,6 +31,7 @@
 
         <div class="col-12 d-flex gap-2">
             <button type="submit" class="btn btn-danger">Confirmar cancelamento</button>
+            <a class="btn btn-outline-secondary" asp-page="/Index">Voltar</a>
         </div>
     </form>
 </section>

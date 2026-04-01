@@ -1,33 +1,37 @@
 @page "{id:int}"
 @model frontend.Pages.Lancamentos.PagarModel
 @{
-    ViewData["Title"] = "Pagar lancamento";
+    ViewData["Title"] = Model.AcaoTitulo;
 }
 
 <section class="page-header mb-4">
     <div>
         <p class="eyebrow">Pagamento</p>
-        <h1>Registrar pagamento</h1>
+        <h1>@Model.AcaoTitulo</h1>
     </div>
     <a class="btn btn-outline-secondary" asp-page="/Index">Voltar</a>
 </section>
 
 <section class="panel-card">
-    <p><strong>@Model.Descricao</strong></p>
-    <p class="text-muted">Apenas lancamentos em aberto podem ser pagos.</p>
+    <div class="form-helper mb-3">
+        <strong>Lançamento:</strong> @Model.Descricao
+        <br />
+        Apenas lançamentos em <strong>aberto</strong> podem ser @Model.AcaoTexto.
+    </div>
 
     <form method="post" class="row g-3">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-0"></div>
         <input type="hidden" asp-for="Id" />
 
         <div class="col-md-6">
-            <label class="form-label" asp-for="DataProcessamento">Data do pagamento</label>
+            <label class="form-label" asp-for="DataProcessamento">Data do processamento</label>
             <input class="form-control" asp-for="DataProcessamento" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
             <span class="text-danger" asp-validation-for="DataProcessamento"></span>
         </div>
 
         <div class="col-12 d-flex gap-2">
-            <button type="submit" class="btn btn-success">Confirmar pagamento</button>
+            <button type="submit" class="btn btn-success">@Model.AcaoBotao</button>
+            <a class="btn btn-outline-secondary" asp-page="/Index">Cancelar</a>
         </div>
     </form>
 </section>

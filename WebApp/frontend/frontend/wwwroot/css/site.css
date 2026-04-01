@@ -44,7 +44,8 @@ body {
 .hero-card,
 .panel-card,
 .stat-card,
-.preview-card {
+.preview-card,
+.form-helper {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 22px;
@@ -90,8 +91,34 @@ body {
 
 .stat-card,
 .panel-card,
-.preview-card {
+.preview-card,
+.form-helper {
   padding: 1.5rem;
+}
+
+.form-helper {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e3a8a;
+}
+
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  margin: 0.35rem 0 0;
+  color: #64748b;
 }
 
 .stat-card strong {
@@ -122,6 +149,24 @@ body {
   font-weight: 700;
 }
 
+.type-pill {
+  display: inline-flex;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.type-credito {
+  background: #ecfeff;
+  color: #0f766e;
+}
+
+.type-debito {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
 .status-aberto {
   background: #dbeafe;
   color: #1d4ed8;
@@ -141,8 +186,41 @@ body {
   padding: 1rem 0.75rem;
 }
 
+.table thead th {
+  color: #475569;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom-width: 1px;
+}
+
+.alert {
+  border: 0;
+  border-radius: 16px;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  border-radius: 14px;
+  border-color: #cbd5e1;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.12);
+}
+
 .btn {
   border-radius: 999px;
+}
+
+.field-hidden {
+  display: none;
 }
 
 .footer {

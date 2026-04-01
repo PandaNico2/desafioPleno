@@ -1,5 +1,6 @@
 using CodeBehind.Models;
 using CodeBehind.Services;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -46,6 +47,20 @@ public class CancelarModel : PageModel
         catch (DomainException ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
+            var item = await _service.ObterPorIdAsync(Id, cancellationToken);
+            Descricao = item?.Descricao ?? string.Empty;
+            return Page();
+        }
+        catch (SqlException ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro ao acessar o banco de dados: {ex.Message}");
+            var item = await _service.ObterPorIdAsync(Id, cancellationToken);
+            Descricao = item?.Descricao ?? string.Empty;
+            return Page();
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro inesperado: {ex.Message}");
             var item = await _service.ObterPorIdAsync(Id, cancellationToken);
             Descricao = item?.Descricao ?? string.Empty;
             return Page();
