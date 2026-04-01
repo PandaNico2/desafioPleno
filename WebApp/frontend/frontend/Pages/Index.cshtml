@@ -1,17 +1,17 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "Lancamentos";
+    ViewData["Title"] = "Lançamentos";
 }
 
 <section class="hero-card mb-4">
     <div>
         <p class="eyebrow">Desafio tecnico</p>
-        <h1>Controle de lancamentos financeiros</h1>
-        <p class="hero-copy">Cadastre, acompanhe o saldo de itens pagos e execute os fluxos de pagamento, cancelamento e exportacao por competencia.</p>
+        <h1>Controle de lançamentos financeiros</h1>
+        <p class="hero-copy">Cadastre os lançamentos, acompanhe o saldo dos itens pagos e execute pagamento, cancelamento e exportação por competência.</p>
     </div>
     <div class="hero-actions">
-        <a class="btn btn-primary btn-lg" asp-page="/Lancamentos/Criar">Novo lancamento</a>
+        <a class="btn btn-primary btn-lg" asp-page="/Lancamentos/Criar">Novo lançamento</a>
     </div>
 </section>
 
@@ -47,39 +47,54 @@
 </section>
 
 <section class="panel-card mb-4">
-    <form method="get" class="row g-3 align-items-end">
+    <form method="get" asp-page="/Index" class="row g-3">
         <div class="col-md-4">
-            <label class="form-label" asp-for="Competencia">Competencia</label>
-            <input class="form-control" asp-for="Competencia" placeholder="AAAA-MM" />
+            <label class="form-label" asp-for="Competencia">Competência</label>
+            <input class="form-control" asp-for="Competencia" placeholder="AAAA-MM" maxlength="7" inputmode="numeric" data-mask="competencia" />
+            <small class="text-muted">Use o filtro para localizar um mês específico e exportar CSV.</small>
         </div>
-        <div class="col-md-8 d-flex gap-2">
+        <div class="col-md-3">
+            <label class="form-label" asp-for="Tipo">Tipo</label>
+            <select class="form-select" asp-for="Tipo" asp-items="Model.Tipos"></select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label" asp-for="Status">Status</label>
+            <select class="form-select" asp-for="Status" asp-items="Model.Statuses"></select>
+        </div>
+        <div class="col-12 d-flex gap-2 flex-wrap">
             <button type="submit" class="btn btn-outline-primary">Filtrar</button>
             <a class="btn btn-outline-secondary" asp-page="/Index">Limpar</a>
-            <button type="submit" class="btn btn-outline-success" asp-page-handler="Exportar">Exportar CSV</button>
+            <button type="submit" class="btn btn-outline-success" name="handler" value="Exportar">Exportar CSV</button>
         </div>
     </form>
 </section>
 
 <section class="panel-card">
+    <div class="section-title-row">
+        <div>
+            <h2 class="section-title">Lançamentos cadastrados</h2>
+            <p class="section-subtitle">Ações de pagamento e cancelamento aparecem apenas para itens em aberto.</p>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table align-middle">
             <thead>
                 <tr>
-                    <th>Descricao</th>
-                    <th>Competencia</th>
+                    <th>Descrição</th>
+                    <th>Competência</th>
                     <th>Tipo</th>
                     <th>Status</th>
                     <th>Valor Original</th>
                     <th>Valor Calculado</th>
-                    <th>Data Lancamento</th>
-                    <th>Acoes</th>
+                    <th>Data Lançamento</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
             @if (Model.Lancamentos.Count == 0)
             {
                 <tr>
-                    <td colspan="8" class="text-center text-muted py-4">Nenhum lancamento encontrado.</td>
+                    <td colspan="8" class="text-center text-muted py-4">Nenhum lançamento encontrado.</td>
                 </tr>
             }
             else
@@ -92,16 +107,18 @@
                             <div class="text-muted small">@item.DataCriacao.ToString("dd/MM/yyyy HH:mm")</div>
                         </td>
                         <td>@item.Competencia</td>
-                        <td>@item.Tipo</td>
+                        <td><span class="type-pill type-@item.Tipo.ToString().ToLowerInvariant()">@item.Tipo</span></td>
                         <td><span class="status-pill status-@item.Status.ToString().ToLowerInvariant()">@item.Status</span></td>
                         <td>@item.ValorOriginal.ToString("C")</td>
                         <td>@item.ValorCalculado.ToString("C")</td>
                         <td>@item.DataLancamento.ToString("dd/MM/yyyy HH:mm")</td>
                         <td class="actions-cell">
-                            <a class="btn btn-sm btn-outline-primary" asp-page="/Lancamentos/Editar" asp-route-id="@item.Id">Editar</a>
                             @if (item.Status == CodeBehind.Enums.StatusLancamento.Aberto)
                             {
-                                <a class="btn btn-sm btn-outline-success" asp-page="/Lancamentos/Pagar" asp-route-id="@item.Id">Pagar</a>
+                                <a class="btn btn-sm btn-outline-primary" asp-page="/Lancamentos/Editar" asp-route-id="@item.Id">Editar</a>
+                                <a class="btn btn-sm btn-outline-success" asp-page="/Lancamentos/Pagar" asp-route-id="@item.Id">
+                                    @(item.Tipo == CodeBehind.Enums.TipoLancamento.Credito ? "Receber" : "Pagar")
+                                </a>
                                 <a class="btn btn-sm btn-outline-danger" asp-page="/Lancamentos/Cancelar" asp-route-id="@item.Id">Cancelar</a>
                             }
                         </td>
@@ -112,3 +129,9 @@
         </table>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        window.inputMasks && window.inputMasks();
+    </script>
+}
